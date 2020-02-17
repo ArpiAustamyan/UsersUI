@@ -1,7 +1,8 @@
+
 import React from 'react';
 import './App.css';
 const axios = require('axios').default;
-
+​
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -10,12 +11,12 @@ class App extends React.Component {
       lastname:"",
       users: []
     };
-
+​
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   
   }
-
+​
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -28,8 +29,8 @@ class App extends React.Component {
       FirstName: this.state.firstname,
       LastName: this.state.lastname
     };
-
-
+​
+​
    fetch('http://localhost:50617/api/Users', {
           method: 'POST', 
           mode: 'no-cors', 
@@ -43,18 +44,16 @@ class App extends React.Component {
       })
       .then(response => response.json())  
   }
-
+​
    componentDidMount() {
-     
+     debugger;
      axios.get('http://localhost:50617/api/Users')
-    .then(res => res.json())
-    .then((data) => {
-      this.setState({ users: data})
-    });
-
+      .then((response) => {
+        this.setState({ users: response.data})
+      });
   }
  
-
+​
   render(){
     const { users } = this.state;
     return (
@@ -79,28 +78,25 @@ class App extends React.Component {
     );
     }
 }  
-
+​
 class UsersList extends React.Component{
-    render(){
-      {
-         if(this.props.data.length>0){ 
-        return(
-        <div>
-                this.props.data.map(users=>
-               
-                <div>
-                  <span>{this.props.data.firstname}</span>
-                  <span>{this.props.data.lastname}</span>
-                </div>
+  render(){
+    {
+      const items = this.props.data.map(user => (
+        <div key={user.id}>
+          <span>{user.firstname}</span>
+          <label>'    '</label>
+          <span>{user.lastname} </span>
         </div>
-        );}
-        else {
-          return(
-        <div id = "error">
-        Something went wrong or there are't users!!!
-          </div>);}
-      }
+      ));
+      
+      return(
+      <div>
+        {items}      
+      </div>
+      );
     }
+  }
 }
 
 export default App;
